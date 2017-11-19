@@ -4,7 +4,7 @@ $:.unshift(File.expand_path("../lib", __dir__))
 
 require "orc"
 
-orc = Orc::Client.new(:list)
+orc = Orc::Client.new(:label)
 
 if ARGV.include?("--pr")
   pr_index  = ARGV.index("--pr")
