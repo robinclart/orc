@@ -45,6 +45,21 @@ module Orc
       content + "\n"
     end
 
+    def add_labels(number:, labels: [])
+      uri = issues_uri
+      uri.path = uri.path + "/#{number}/labels"
+
+      response = Typhoeus::Request.new(uri.to_s, {
+        method: :post,
+        body: JSON.generate(labels),
+        headers: {
+          "Content-Type"  => "application/json",
+          "Accept"        => "application/vnd.github.v3+json",
+          "Authorization" => "token #{token}",
+        },
+      }).run
+    end
+
     def create_pull_request(params = {})
       pr = find_first_pull_request_by_head(params[:head])
 
@@ -185,6 +200,12 @@ module Orc
     def pulls_uri
       uri = URI.parse(url)
       uri.path = uri.path + "/repos/#{repo_name}/pulls"
+      uri
+    end
+
+    def issues_uri
+      uri = URI.parse(url)
+      uri.path = uri.path + "/repos/#{repo_name}/issues"
       uri
     end
 
