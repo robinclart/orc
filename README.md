@@ -10,7 +10,7 @@
 orc pr [BASE_BRANCH]
 ```
 
-Create a pull request on GitHub based on the supplied base branch. This command will open your $EDITOR. The first line is to be used as the title of the PR and the rest will be used as the body. If a PR already exist for the current branch the url for the existing PR will be returned the same as if it had just been created but note that the PR title and body won't be overwritten. An empty title and body will abort the command.
+Create a pull request on GitHub based on the supplied base branch or using default base branch in the config file. This command will open your $EDITOR. The first line is to be used as the title of the PR and the rest will be used as the body. If a PR already exist for the current branch the url for the existing PR will be returned the same as if it had just been created but note that the PR title and body won't be overwritten. An empty title and body will abort the command.
 
 ### Amend the Remote Branch
 

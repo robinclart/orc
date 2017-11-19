@@ -9,10 +9,6 @@ orc = Orc::Client.new(:pr)
 base_branch     = ARGV.first
 github_template = false
 
-unless base_branch
-  orc.fatal(:missing_pr_base_branch)
-end
-
 if File.exists?(".orc/PULL_REQUEST")
   orc.fatal(:pr_message_already_exist)
 end

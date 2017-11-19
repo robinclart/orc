@@ -52,6 +52,8 @@ module Orc
         return pr
       end
 
+      params[:base] ||= repo_base
+
       response = Typhoeus::Request.new(pulls_uri.to_s, {
         method: :post,
         body: JSON.generate(params),
@@ -170,8 +172,8 @@ module Orc
       @config["core"]["url"]
     end
 
-    def repo_pr_base
-      @config["repo"]["pr_base"]
+    def repo_base
+      @config["repo"]["base"]
     end
 
     def search_uri
