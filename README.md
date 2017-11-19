@@ -58,15 +58,15 @@ orc review PR
 
 Checkout the branch for the given PR number and display the PR title and body. Note that if we're already on the right branch this will do nothing.
 
-## TODO
-
 ### Add Label to a Pull Request
 
 ```
 orc label [--pr NUMBER] NAME [NAME...]
 ```
 
-Add the given label to the current branch's PR or to the PR that was supplied as option.
+Add the given labels to the current branch's PR or to the PR that was supplied as option.
+
+## TODO
 
 ### Add a Comment
 
