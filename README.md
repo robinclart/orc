@@ -66,8 +66,6 @@ orc label [--pr NUMBER] NAME [NAME...]
 
 Add the given labels to the current branch's PR or to the PR that was supplied as option.
 
-## TODO
-
 ### Add a Comment
 
 ```
