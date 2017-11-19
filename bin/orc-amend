@@ -1,0 +1,4 @@
+#!/usr/bin/env ruby
+
+head = `git rev-parse --abbrev-ref HEAD`.strip
+system("git push --force-with-lease origin #{head}")
