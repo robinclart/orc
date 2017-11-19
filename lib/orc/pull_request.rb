@@ -23,5 +23,9 @@ module Orc
     def html_url
       @attributes["html_url"]
     end
+
+    def head_ref
+      @attributes["head"]["ref"]
+    end
   end
 end
