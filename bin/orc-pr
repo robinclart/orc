@@ -40,3 +40,5 @@ pr = orc.create_pull_request({
 })
 
 puts pr.html_url
+
+exit 0

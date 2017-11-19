@@ -22,3 +22,5 @@ authors.sort { |(_, x), (_, y)| y <=> x }.each do |username, count|
     count.to_s.rjust(3, " "),
   ].join(" ")
 end
+
+exit 0
