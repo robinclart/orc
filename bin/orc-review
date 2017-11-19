@@ -7,12 +7,17 @@ require "orc"
 orc = Orc::Client.new(:review)
 
 pr_number = ARGV.first
+head      = `git rev-parse --abbrev-ref HEAD`.strip
 
 unless pr_number
   orc.fatal(:missing_pr_number)
 end
 
 pr = orc.find_pull_request(pr_number)
+
+if pr.head_ref == head
+  exit 0
+end
 
 system("git fetch --all")
 system("git checkout #{pr.head_ref}")

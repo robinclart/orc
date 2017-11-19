@@ -6,10 +6,6 @@
 
 Push the current branch. Create a file called PULL_REQUEST. Open the file in `$EDITOR`. Once the file is saved and the editor closed, create a PR with the content of the PULL_REQUEST file where the first line will be the title. Finally remove the PULL_REQUEST file.
 
-`orc push`
-
-Git push the current branch.
-
 `orc amend`
 
 Git push force the current branch.
@@ -23,13 +19,13 @@ List all authors that currently have a PR open. Example:
     tommy (2)
     ...
 
-`orc list AUTHOR`
+`orc list [AUTHOR]`
 
-List all PRs for the given AUTHOR.
+List all PRs for the given AUTHOR. Or list all PRs.
 
-`orc read PR`
+`orc read [PR]`
 
-Read the description for a given PR number.
+Read the description for a given PR number or for the current branch.
 
 `orc review PR`
 
