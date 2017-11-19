@@ -45,23 +45,76 @@ module Orc
       content + "\n"
     end
 
-    def search_all_pull_requests(query = "")
+    def create_pull_request(params = {})
+      pr = find_first_pull_request_by_head(params[:head])
+
+      if pr
+        return pr
+      end
+
+      response = Typhoeus::Request.new(pulls_uri.to_s, {
+        method: :post,
+        body: JSON.generate(params),
+        headers: {
+          "Content-Type"  => "application/json",
+          "Accept"        => "application/vnd.github.v3+json",
+          "Authorization" => "token #{token}",
+        },
+      }).run
+
+      attributes = JSON.parse(response.body)
+
+      if attributes["errors"]
+        errors = attributes["errors"]
+
+        if errors.first["field"] == "base" && errors.first["code"] == "invalid"
+          fatal(:invalid_base_branch_for_pr)
+        else
+          $stderr.puts(response.body.strip)
+          fatal(:create_pr_github_error)
+        end
+      end
+
+      PullRequest.new(attributes)
+    end
+
+    def find_first_pull_request_by_head(head_branch)
+      uri = pulls_uri
+      uri.query = URI.encode_www_form({
+        state: "open",
+        head:  "#{head_user}:#{head_branch}",
+      })
+
+      response = Typhoeus::Request.new(uri.to_s, {
+        method: :get,
+        headers: {
+          "Accept"        => "application/vnd.github.v3+json",
+          "Authorization" => "token #{token}",
+        },
+      }).run
+
+      attributes = JSON.parse(response.body).first
+
+      if attributes
+        PullRequest.new(attributes)
+      end
+    end
+
+    def search_pull_requests(query = "")
       result = []
       page   = 1
+      query  = [query, "is:pr", "repo:#{repo_name}"].join(" ")
 
       loop do
-        query = [
-          query,
-          "is:pr",
-          "repo:#{repo_name}"
-        ].join(" ")
-
         uri = search_uri
         uri.query = URI.encode_www_form(q: query, page: page)
 
         response = Typhoeus::Request.new(uri.to_s, {
           method: :get,
-          headers: request_headers,
+          headers: {
+            "Accept"        => "application/vnd.github.v3+json",
+            "Authorization" => "token #{token}",
+          },
         }).run
 
         prs   = parse_prs(response.body)
@@ -81,12 +134,8 @@ module Orc
 
     private
 
-    def request_headers
-      {
-        "Content-Type"  => "application/json",
-        "Accept"        => "application/vnd.github.v3+json",
-        "Authorization" => "token #{token}",
-      }
+    def head_user
+      repo_name.split("/").first
     end
 
     def repo_name
@@ -101,9 +150,19 @@ module Orc
       @config["core"]["url"]
     end
 
+    def repo_pr_base
+      @config["repo"]["pr_base"]
+    end
+
     def search_uri
       uri = URI.parse(url)
-      uri.path = "/api/v3/search/issues"
+      uri.path = uri.path + "/search/issues"
+      uri
+    end
+
+    def pulls_uri
+      uri = URI.parse(url)
+      uri.path = uri.path + "/repos/#{repo_name}/pulls"
       uri
     end
 

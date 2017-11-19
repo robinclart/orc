@@ -7,7 +7,7 @@ require "orc"
 orc = Orc::Client.new(:authors)
 
 authors = {}
-prs     = orc.search_all_pull_requests("is:open")
+prs     = orc.search_pull_requests("is:open")
 
 prs.each do |pr|
   authors[pr.username] ||= 0

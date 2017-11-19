@@ -6,7 +6,12 @@ require "orc"
 
 orc = Orc::Client.new(:pr)
 
+base_branch     = ARGV.first
 github_template = false
+
+unless base_branch
+  orc.fatal(:missing_pr_base_branch)
+end
 
 if File.exists?(".orc/PULL_REQUEST")
   orc.fatal(:pr_message_already_exist)
@@ -25,12 +30,13 @@ end
 lines = content.each_line.to_a
 title = lines.shift.strip
 body  = lines.join.strip + "\n"
+head  = `git rev-parse --abbrev-ref HEAD`.strip
 
-current_branch = `git rev-parse --abbrev-ref HEAD`
-system("git push origin #{current_branch}")
-
-orc.create_pull_request({
+pr = orc.create_pull_request({
   title: title,
   body:  body,
-  head:  current_branch,
+  base:  base_branch,
+  head:  head,
 })
+
+puts pr.html_url

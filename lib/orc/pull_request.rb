@@ -15,5 +15,9 @@ module Orc
     def number
       @attributes["number"]
     end
+
+    def html_url
+      @attributes["html_url"]
+    end
   end
 end
