@@ -16,6 +16,10 @@ else
   prs    = orc.search_pull_requests("is:open author:#{author}")
 end
 
+if prs.count.zero?
+  exit 0
+end
+
 padding = prs.map { |pr| pr.number.to_s.size }.max
 
 prs.each do |pr|
