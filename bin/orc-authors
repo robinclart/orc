@@ -1,0 +1,24 @@
+#!/usr/bin/env ruby
+
+$:.unshift(File.expand_path("../lib", __dir__))
+
+require "orc"
+
+orc = Orc::Client.new(:authors)
+
+authors = {}
+prs     = orc.search_all_pull_requests("is:open")
+
+prs.each do |pr|
+  authors[pr.username] ||= 0
+  authors[pr.username]  += 1
+end
+
+padding = authors.keys.map { |u| u.size }.max
+
+authors.sort { |(_, x), (_, y)| y <=> x }.each do |username, count|
+  puts [
+    username.ljust(padding, " "),
+    count.to_s.rjust(3, " "),
+  ].join(" ")
+end

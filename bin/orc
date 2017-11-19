@@ -1,0 +1,12 @@
+#!/usr/bin/env ruby
+
+$:.unshift(File.expand_path("../lib", __dir__))
+
+require "orc"
+
+orc = Orc::Client.new(:base)
+
+command = ARGV.shift
+args    = ARGV.map { |a| "'#{a}'" }.join(" ")
+
+system "orc-#{command} #{args}"

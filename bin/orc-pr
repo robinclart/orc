@@ -1,0 +1,36 @@
+#!/usr/bin/env ruby
+
+$:.unshift(File.expand_path("../lib", __dir__))
+
+require "orc"
+
+orc = Orc::Client.new(:pr)
+
+github_template = false
+
+if File.exists?(".orc/PULL_REQUEST")
+  orc.fatal(:pr_message_already_exist)
+end
+
+if File.exists?(".github/PULL_REQUEST_TEMPLATE.md")
+  github_template = File.read(".github/PULL_REQUEST_TEMPLATE.md")
+end
+
+content = orc.open_editor(template: "PULL_REQUEST", append: github_template)
+
+unless content
+  orc.fatal(:empty_pr_message)
+end
+
+lines = content.each_line.to_a
+title = lines.shift.strip
+body  = lines.join.strip + "\n"
+
+current_branch = `git rev-parse --abbrev-ref HEAD`
+system("git push origin #{current_branch}")
+
+orc.create_pull_request({
+  title: title,
+  body:  body,
+  head:  current_branch,
+})

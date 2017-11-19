@@ -4,11 +4,15 @@
 
 `orc pr`
 
-Push the current branch. Create a file called PULL_REQUEST. Open the file in `$EDITOR`. Once the file is saved and the editor closed, create a PR with the content of the PULL_REQUEST file where the first line will be the title and add the `pr:review` label. Finally remove the PULL_REQUEST file.
+Push the current branch. Create a file called PULL_REQUEST. Open the file in `$EDITOR`. Once the file is saved and the editor closed, create a PR with the content of the PULL_REQUEST file where the first line will be the title. Finally remove the PULL_REQUEST file.
+
+`orc push`
+
+Git push the current branch.
 
 `orc amend`
 
-Git push force the current branch or the branch associated with a given PR number if given.
+Git push force the current branch.
 
 `orc authors`
 

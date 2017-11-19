@@ -1,0 +1,38 @@
+#!/usr/bin/env ruby
+
+$:.unshift(File.expand_path("../lib", __dir__))
+
+require "orc"
+
+orc = Orc::Client.new(:list)
+
+all = false
+
+if ARGV.first.nil?
+  all = true
+  prs = orc.search_all_pull_requests("is:open")
+else
+  author = ARGV.first
+  prs    = orc.search_all_pull_requests("is:open author:#{author}")
+end
+
+padding = prs.map { |pr| pr.number.to_s.size }.max
+
+prs.each do |pr|
+  print pr.number.to_s.rjust(padding, " ")
+  print "  "
+  print pr.title.to_s
+
+  if all
+    print " (#{pr.username})"
+  end
+
+  puts
+end
+
+if all
+  puts
+  puts "#{prs.count} pull requests"
+end
+
+exit 0
