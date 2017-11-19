@@ -12,6 +12,10 @@ module Orc
       @attributes["title"]
     end
 
+    def body
+      @attributes["body"]
+    end
+
     def number
       @attributes["number"]
     end

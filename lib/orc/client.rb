@@ -100,6 +100,26 @@ module Orc
       end
     end
 
+    def find_pull_request(number)
+      uri = pulls_uri
+      uri.path = uri.path + "/#{number}"
+
+      response = Typhoeus::Request.new(uri.to_s, {
+        method: :get,
+        headers: {
+          "Accept"        => "application/vnd.github.v3+json",
+          "Authorization" => "token #{token}",
+        },
+      }).run
+
+      attributes = JSON.parse(response.body)
+
+      if attributes
+        PullRequest.new(attributes)
+      end
+    end
+
+
     def search_pull_requests(query = "")
       result = []
       page   = 1

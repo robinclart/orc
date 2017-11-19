@@ -1,0 +1,23 @@
+#!/usr/bin/env ruby
+
+$:.unshift(File.expand_path("../lib", __dir__))
+
+require "orc"
+
+orc = Orc::Client.new(:read)
+
+if pr_number = ARGV.first
+  pr = orc.find_pull_request(pr_number)
+else
+  head = `git rev-parse --abbrev-ref HEAD`.strip
+  pr = orc.find_first_pull_request_by_head(head)
+end
+
+if pr
+  puts pr.title
+  puts "-" * pr.title.strip.size
+  puts
+  puts pr.body
+end
+
+exit 0
