@@ -32,7 +32,11 @@ end
 
 if all
   puts
-  puts "#{prs.count} pull requests"
+  if prs.count == 1
+    puts "#{prs.count} open pull request"
+  else
+    puts "#{prs.count} open pull requests"
+  end
 end
 
 exit 0
