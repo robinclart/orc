@@ -1,6 +1,5 @@
 module Orc
   class Client
-    ROOT    = File.expand_path("../", __dir__)
     REL_RX  = %r/rel="(.*?)"/
     PAGE_RX = %r/page=(\d)/
 
@@ -12,12 +11,13 @@ module Orc
     def fatal(code)
       error = File.read(File.join(ROOT, "errors", "#{code}"))
       $stderr.write error
+      $stderr.puts "error: #{code}"
 
       exit 1
     end
 
     def open_editor(template:, append: nil, remove_comments: true)
-      source = File.read(File.join(ROOT, "templates", template.to_s))
+      source = File.read(File.join(Orc::ROOT, "templates", template.to_s))
 
       File.open(".orc/#{template}", "w+") do |f|
         f.write(source)
