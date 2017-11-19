@@ -51,8 +51,6 @@ module Orc
       uri = pulls_uri
       uri.path = uri.path + "/#{number}/reviews"
 
-      p params
-
       response = Typhoeus::Request.new(uri.to_s, {
         method: :post,
         body: JSON.generate(params),
@@ -62,8 +60,6 @@ module Orc
           "Authorization" => "token #{token}",
         },
       }).run
-
-      puts response.body
     end
 
     def add_labels(number:, labels: [])

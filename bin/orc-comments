@@ -6,7 +6,11 @@ require "orc"
 
 orc = Orc::Client.new(:comments)
 
-comments = JSON.parse(File.read(".orc/COMMENTS"))
+comments = []
+
+if File.exist?(".orc/COMMENTS")
+  comments = JSON.parse(File.read(".orc/COMMENTS"))
+end
 
 commit = `git rev-parse HEAD`.strip
 head   = `git rev-parse --abbrev-ref HEAD`.strip
