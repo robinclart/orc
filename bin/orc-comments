@@ -1,0 +1,22 @@
+#!/usr/bin/env ruby
+
+$:.unshift(File.expand_path("../lib", __dir__))
+
+require "orc"
+
+orc = Orc::Client.new(:comments)
+
+comments = JSON.parse(File.read(".orc/COMMENTS"))
+
+commit = `git rev-parse HEAD`.strip
+head   = `git rev-parse --abbrev-ref HEAD`.strip
+pr     = orc.find_first_pull_request_by_head(head)
+
+orc.create_review({
+  event:     "COMMENT",
+  number:    pr.number,
+  commit_id: commit,
+  comments:  comments,
+})
+
+exit 0

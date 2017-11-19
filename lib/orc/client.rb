@@ -36,13 +36,34 @@ module Orc
         content = lines.select { |l| l.chars[0] != "#" }.join.strip
       end
 
-      FileUtils.rm(".orc/PULL_REQUEST")
+      FileUtils.rm(".orc/#{template}")
 
       if content == ""
         return nil
       end
 
       content + "\n"
+    end
+
+    def create_review(params = {})
+      number = params.delete(:number)
+      params[:body] = ""
+      uri = pulls_uri
+      uri.path = uri.path + "/#{number}/reviews"
+
+      p params
+
+      response = Typhoeus::Request.new(uri.to_s, {
+        method: :post,
+        body: JSON.generate(params),
+        headers: {
+          "Content-Type"  => "application/json",
+          "Accept"        => "application/vnd.github.v3+json",
+          "Authorization" => "token #{token}",
+        },
+      }).run
+
+      puts response.body
     end
 
     def add_labels(number:, labels: [])

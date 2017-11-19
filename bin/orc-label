@@ -22,3 +22,5 @@ else
 end
 
 orc.add_labels(number: pr.number, labels: ARGV)
+
+exit 0
