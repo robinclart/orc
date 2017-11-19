@@ -2,67 +2,100 @@
 
 `orc` (the name is a tribute to `arc` from which this is inspired) is a tool that helps you create, list, review and in general work with pull requests from the comfort of the command line. The utlimate aims being to reduce the amount of time spent reviewing and help you do better reviews since you will be doing it from the comfort of your favorite editor, diff tool, etc.
 
-`orc pr`
+## Commands
 
-Push the current branch. Create a file called PULL_REQUEST. Open the file in `$EDITOR`. Once the file is saved and the editor closed, create a PR with the content of the PULL_REQUEST file where the first line will be the title. Finally remove the PULL_REQUEST file.
+### Creating a Pull Request
 
-`orc amend`
+```
+orc pr [BASE_BRANCH]
+```
+
+Create a pull request on GitHub based on the supplied base branch. This command will open your $EDITOR. The first line is to be used as the title of the PR and the rest will be used as the body. If a PR already exist for the current branch the url for the existing PR will be returned the same as if it had just been created but note that the PR title and body won't be overwritten. An empty title and body will abort the command.
+
+### Amend the Remote Branch
+
+```
+orc amend
+```
 
 Git push force the current branch.
 
-`orc authors`
+### List Authors & Counts
+
+```
+orc authors
+```
 
 List all authors that currently have a PR open. Example:
 
-    francois (3)
-    ton (4)
-    tommy (2)
-    ...
+```
+francois (3)
+ton (4)
+tommy (2)
+```
 
-`orc list [AUTHOR]`
+### List Pull Requests
 
-List all PRs for the given AUTHOR. Or list all PRs.
+```
+orc list [AUTHOR]
+```
 
-`orc read [PR]`
+List all PRs for the given AUTHOR. Or list all PRs if no AUTHOR was given.
+
+### Read Pull Request Description
+
+```
+orc read [PR]
+```
 
 Read the description for a given PR number or for the current branch.
 
-`orc review PR`
+### Review a Pull Request
 
-Checkout the branch for the given PR number and display the PR description. If we're already on the right branch do nothing.
+```
+orc review PR
+```
 
-`orc comment some/file.rb:387`
+Checkout the branch for the given PR number and display the PR title and body. Note that if we're already on the right branch this will do nothing.
 
-Create a file called COMMENT and open in `$EDITOR`. Upon release create a file called COMMENTS and add the content of COMMENT or append it if COMMENTS already exist. File should be a JSON ready to sent to the GitHub API.
+## TODO
 
-`orc comments [PR]`
+### Add Label to a Pull Request
+
+```
+orc label [--pr NUMBER] NAME [NAME...]
+```
+
+Add the given label to the current branch's PR or to the PR that was supplied as option.
+
+### Add a Comment
+
+```
+orc comment PATH:LINE
+```
+
+Open your `$EDITOR` for you to provide a comment. The comment will be saved until you call one of `orc-comments`, `orc-request-changes` or `orc-approve` upon which it will be sent along every other comments you have written.
+
+### Submit Comments
+
+```
+orc comments
+```
 
 Submit all comments and create review in `COMMENT` state.
 
-`orc request-changes [PR]`
+### Submit Comments & Request Changes
+
+```
+orc request-changes
+```
 
 Submit all comments and create a review in `REQUEST_CHANGES` state.
 
-`orc approve [PR]`
+### Submit Comments & Approve Pull Request
+
+```
+orc approve
+```
 
 Submit all comments and create a review in `APPROVE` state.
-
-`orc merge [PR]`
-
-Merge the given PR or to the PR associated to the current branch.
-
-`orc label NAME [PR]`
-
-Add the given label to the current branch PR or to the given PR number.
-
-`orc rebuild [PR]`
-
-Force rebuild the current branch on jenkins or the branch associated to the given PR number.
-
-`orc gist PATH`
-
-Create a gist with the content of the given file (or through stdin) and return the url.
-
-## This is only a dream
-
-Now time to make it real.
