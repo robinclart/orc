@@ -10,6 +10,7 @@ comments = []
 
 if File.exist?(".orc/COMMENTS")
   comments = JSON.parse(File.read(".orc/COMMENTS"))
+  FileUtils.rm(".orc/COMMENTS")
 end
 
 commit = `git rev-parse HEAD`.strip
