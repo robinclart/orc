@@ -6,11 +6,21 @@ require "orc"
 
 orc = Orc::Client.new(:read)
 
+read_labels = ARGV.delete("--labels")
+
 if pr_number = ARGV.first
   pr = orc.find_pull_request(pr_number)
 else
   head = `git rev-parse --abbrev-ref HEAD`.strip
   pr = orc.find_first_pull_request_by_head(head)
+end
+
+if read_labels
+  labels = orc.list_labels(pr.number)
+
+  puts labels.map(&:name).join("\n")
+
+  exit 0
 end
 
 if pr

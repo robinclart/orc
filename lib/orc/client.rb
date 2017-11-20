@@ -45,6 +45,22 @@ module Orc
       content + "\n"
     end
 
+    def list_labels(number)
+      uri = issues_uri
+      uri.path = uri.path + "/#{number}/labels"
+
+      response = Typhoeus::Request.new(uri.to_s, {
+        method: :get,
+        headers: {
+          "Accept"        => "application/vnd.github.v3+json",
+          "Authorization" => "token #{token}",
+        },
+      }).run
+
+      attributes = JSON.parse(response.body)
+      attributes.map { |a| Label.new(a) }
+    end
+
     def create_review(params = {})
       number = params.delete(:number)
       params[:body] = ""

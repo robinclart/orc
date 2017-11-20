@@ -8,5 +8,6 @@ module Orc
   ROOT = File.expand_path("../", __dir__)
 
   require "orc/client"
+  require "orc/label"
   require "orc/pull_request"
 end
