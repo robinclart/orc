@@ -6,15 +6,26 @@ require "orc"
 
 orc = Orc::Client.new(:list)
 
-all = false
+all   = false
+query = ["is:open"]
+
+if ARGV.include?("--label")
+  label_index = ARGV.index("--label")
+  _           = ARGV.delete_at(label_index)
+  label       = ARGV.delete_at(label_index)
+
+  if label
+    query << "label:#{label}"
+  end
+end
 
 if ARGV.first.nil?
   all = true
-  prs = orc.search_pull_requests("is:open")
 else
-  author = ARGV.first
-  prs    = orc.search_pull_requests("is:open author:#{author}")
+  query << "author:#{ARGV.first}"
 end
+
+prs = orc.search_pull_requests(query.compact.join(" "))
 
 if prs.count.zero?
   exit 0
