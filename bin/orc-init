@@ -1,0 +1,75 @@
+#!/usr/bin/env ruby
+
+$:.unshift(File.expand_path("../lib", __dir__))
+
+require "orc"
+
+orc = Orc::Client.new(:label)
+
+correct = false
+
+until correct
+  puts "Are you using github.com (y/n):"
+  github_com = Readline.readline("> ")
+  puts
+
+  if github_com == "y"
+    url = "https://api.github.com"
+  else
+    puts "GitHub Enterprise URL: "
+    url = Readline.readline("> ")
+    uri = URI.parse(url)
+    uri.path = "/api/v3"
+    url = uri.to_s
+    puts
+  end
+
+  puts "GitHub username:"
+  username = Readline.readline("> ")
+  puts
+  puts "Repository name:"
+  repo_name = Readline.readline("> ")
+  puts
+  puts "Remote:"
+  remote = Readline.readline("> ")
+  puts
+  puts "Default base branch:"
+  default_base = Readline.readline("> ")
+  puts
+  puts "Personal access token:"
+  token = Readline.readline("> ")
+  puts
+
+  puts "GitHub API URL:        #{url}"
+  puts "GitHub username:       #{username}"
+  puts "Repository name:       #{repo_name}"
+  puts "Remote:                #{remote}"
+  puts "Default base branch:   #{default_base}"
+  puts "Personal access token: #{token}"
+  puts
+
+  correct = Readline.readline("Is every correct (y/n): ")
+  correct = correct == "y"
+end
+
+puts
+
+config = {
+  "core" => {
+    "url" => url,
+    "token" => token,
+  },
+  "user" => {
+    "name" => username,
+  },
+  "repo" => {
+    "name" => repo_name,
+    "base" => default_base,
+    "remote" => remote,
+  }
+}
+
+FileUtils.mkdir_p(".orc")
+File.write(".orc/config.yml", YAML.dump(config))
+
+exit 0
